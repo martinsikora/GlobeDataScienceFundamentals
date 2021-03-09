@@ -160,8 +160,9 @@ ggdotchart <- function(df, x, label){
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     p
 }
-ggdotchart(vac_top, "total_vaccinations_per_hundred", "country")
+dotchart
 dotchart(vac_top$total_vaccinations_per_hundred, labels = vac_top$country)
+ggdotchart(vac_top, "total_vaccinations_per_hundred", "country")
 ```
 
 ## Coordinate systems
@@ -207,6 +208,18 @@ ggplot(vac_subset, mapping = aes(x = date, y = total_vaccinations)) +
     geom_point() +
     coord_polar()
 ```
+
+### Short exercise 1
+
+Plot the number of people fully vaccinated (variable 'people_fully_vaccinated') against total number of people having received at least one vaccine dose (variable 'people_vaccinated'). 
+```{r coord-ex1, exercise = TRUE}
+vac_subset
+```
+```{r coord-ex1-solution}
+ggplot(vac_subset, mapping = aes(x = people_vaccinated, y = people_fully_vaccinated)) +
+    geom_point()
+```
+
 
 ## Aesthetics
 
@@ -368,6 +381,18 @@ ggplot(vac_subset, mapping = aes(x = date, y = total_vaccinations, shape = count
     geom_point(size = 2, data = vac_subset_last)
 ```
 
+### Short exercise 2
+Plot the number of people fully vaccinated (variable 'people_fully_vaccinated') against total number of people having received at least one vaccine dose (variable 'people_vaccinated'). Map colour to the country (variable 'country'), and use both points and lines as geoms
+
+```{r geom-ex1, exercise = TRUE}
+vac_subset
+```
+```{r geom-ex1-solution}
+ggplot(vac_subset, mapping = aes(x = people_vaccinated, y = people_fully_vaccinated, colour = country)) +
+    geom_point() +
+    geom_line()
+```
+
 ## Facets
 
 ### Simple faceting mapping one variable to panels
@@ -490,6 +515,18 @@ ggplot(vac_subset, mapping = aes(x = date, y = total_vaccinations)) +
     stat_smooth(aes(group = country), method = "lm")
 ```
 
+### Short exercise 3
+Plot the number of people fully vaccinated (variable 'people_fully_vaccinated') against total number of people having received at least one vaccine dose (variable 'people_vaccinated'). Use facets to distinguish countries (variable 'country'), and add a linear smoothing (`method = "lm"`)
+
+```{r facet-ex1, exercise = TRUE}
+vac_subset
+```
+```{r facet-ex1-solution}
+ggplot(vac_subset, mapping = aes(x = people_vaccinated, y = people_fully_vaccinated)) +
+    geom_point() + 
+    stat_smooth(aes(group = country), method = "lm") + 
+    facet_grid(country ~.)
+```
 
 ## Scales
 
@@ -778,12 +815,26 @@ ggplot(vac_subset, mapping = aes(x = date, y = total_vaccinations, shape = count
     theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), strip.background = element_rect(fill = "gainsboro", color = NA), strip.text = element_text(size = 7))
 ```
 
+### Short exercise 4
+Plot the number of people fully vaccinated (variable 'people_fully_vaccinated') against total number of people having received at least one vaccine dose (variable 'people_vaccinated'). Use a logarithmic scale of base 10 on the y axis, and use label "Log(People fully vaccinated)" for the y axis
+
+```{r scale-ex1, exercise = TRUE}
+vac_subset
+```
+```{r scale-ex1-solution}
+ggplot(vac_subset, mapping = aes(x = people_vaccinated, y = people_fully_vaccinated)) +
+    geom_point() + 
+    scale_y_continuous(trans = "log10") + 
+    ylab("Log(People fully vaccinated)")
+```
+
 
 ## Exercises
 
 ### Exercise 1
 Visualize the relationship between total number of vaccinations and people fully vaccinated. The visualization should include
 
+* Points and lines as geoms 
 * Aesthetic mapping to differentiate countries
 * A dashed line to highlight x=y
 * Fixed ratio coordinate system with equal units
@@ -791,17 +842,35 @@ Visualize the relationship between total number of vaccinations and people fully
 ```{r ex1, exercise=TRUE}
 vac_subset
 ```
+```{r ex1-hint-1}
+ggplot(vac_subset, mapping = aes(x = total_vaccinations, y = people_fully_vaccinated)) +
+    geom_point(aes(color = country)) +
+    geom_line(aes(color = country))
+```
+```{r ex1-hint-2}
+ggplot(vac_subset, mapping = aes(x = total_vaccinations, y = people_fully_vaccinated)) +
+    geom_point(aes(color = country)) +
+    geom_line(aes(color = country)) +
+    geom_abline(linetype = "dashed")
+```
+```{r ex1-hint-3}
+ggplot(vac_subset, mapping = aes(x = total_vaccinations, y = people_fully_vaccinated)) +
+    geom_point(aes(color = country)) +
+    geom_line(aes(color = country)) +
+    geom_abline(linetype = "dashed") +
+    coord_fixed()
+```
 ```{r ex1-solution}
 ggplot(vac_subset, mapping = aes(x = total_vaccinations, y = people_fully_vaccinated)) +
-    geom_point(aes(color = country), size = 1) +
-    geom_line(aes(color = country), linetype = "dashed") +
-    geom_abline() +
+    geom_point(aes(color = country)) +
+    geom_line(aes(color = country)) +
+    geom_abline(linetype = "dashed") +
     coord_fixed()
 ```
 
 
 ```{r ex1-q1, echo=FALSE}
-question("After many total vaccinations were the first German citizens fully vaccinated?",
+question("After how many total vaccinations were the first German citizens fully vaccinated?",
   answer("500,000"),
   answer("5,000,000"),
   answer("1,000,000", correct = TRUE),
@@ -810,10 +879,10 @@ question("After many total vaccinations were the first German citizens fully vac
 ```
 
 ```{r ex1-q2, echo=FALSE}
-question("What can we learn something about the vaccination strategies of different countries from their respective curves?",
-  answer("Israel is completing vaccinations at a higher rate than Germany", correct = TRUE),
-  answer("Germany is completing vaccinations at a higher rate than Israel"),
-  answer("New vaccinations in Denmark are more often used to complete a vaccination than in France", correct = TRUE)
+question("Looking at the range between 2 million and 4 million total vaccinations, which of the following statements is true ",
+  answer("The rate of vaccinating people fully in Israel is higher than in Germany", correct = TRUE),
+  answer("The rate of vaccinating people fully in Germany is higher than in Israel"),
+  answer("The total number of people fully vaccinated is higher in Germany than in Israel", correct = TRUE)
 )
 ```
 
@@ -825,12 +894,13 @@ Use a plot type and aesthetic mapping to show this information in a single panel
 ```{r ex2, exercise=TRUE, fig.height = 10, fig.width = 8}
 vac
 ```
+```{r ex2-hint-1}
+#Think of a heatmap of people vaccinated, with the day on the x axis and country on the y axis. You can use the geom `geom_raster` for this purpose, and the `scale_fill_...` scales to map the vaccination rate to the fill colour
+```
 ```{r ex2-solution}
 ggplot(vac, mapping = aes(x = date, y = country, fill = people_vaccinated_per_hundred)) +
     geom_raster() +
     scale_fill_viridis(option = "A")
-```
-
 
 ```{r ex2-q1, echo=FALSE}
 question("Which countries have reached the highest vaccination rates?",
@@ -841,12 +911,26 @@ question("Which countries have reached the highest vaccination rates?",
 ```
 
 ### Exercise 3
-Recreate this visualization
+Recreate this visualization.
 
 ![*Exercise 3*](https://www.dropbox.com/s/rnraxfcr3tmcmjj/exercise_plot_1.png?dl=1){width=80%}
 
 ```{r ex3, exercise=TRUE}
 vac_subset
+```
+```{r ex3-hint-1}
+# Use the geom `geom_area` to create the stacked ribbons
+```
+```{r ex3-hint-2}
+ggplot(vac_subset, aes(x = date, y = total_vaccinations)) +
+    geom_hline(yintercept = 0) +
+    geom_area(aes(fill = country), colour = "white", size = 0.25) 
+```
+```{r ex3-hint-3}
+ggplot(vac_subset, aes(x = date, y = total_vaccinations)) +
+    geom_hline(yintercept = 0) +
+    geom_area(aes(fill = country), colour = "white", size = 0.25) +
+    scale_fill_brewer(name = "Country", palette = "Set1") +
 ```
 ```{r ex3-solution}
 ggplot(vac_subset, aes(x = date, y = total_vaccinations)) +
@@ -866,6 +950,18 @@ Recreate this visualization
 
 ```{r ex4, exercise=TRUE, fig.height = 3.5, fig.width = 5}
 vac_subset
+```
+```{r ex4-hint-1}
+# Use the geom `geom_violin` to create the violin plots
+```
+```{r ex4-hint-2}
+ggplot(vac_subset, mapping = aes(y = country, x = daily_vaccinations)) +
+    geom_violin(scale = "width", fill = "gainsboro", color = NA)
+```
+```{r ex4-hint-3}
+ggplot(vac_subset, mapping = aes(y = country, x = daily_vaccinations)) +
+    geom_violin(scale = "width", fill = "gainsboro", color = NA) +
+    geom_point(aes(fill = date), colour = "white", size = 1.5, position = position_jitter(height = 0.15), shape = 21, alpha = 0.9)
 ```
 ```{r ex4-solution}
 ggplot(vac_subset, mapping = aes(y = country, x = daily_vaccinations)) +
