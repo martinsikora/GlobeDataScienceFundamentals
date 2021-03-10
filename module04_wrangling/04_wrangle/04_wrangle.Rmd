@@ -1,0 +1,571 @@
+---
+title: "Data wrangling"
+output: 
+  learnr::tutorial:
+    progressive: true   
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(lubridate)
+library(slider)
+
+covid <- read_csv("https://www.dropbox.com/s/v3677c38ux5sjpd/owid-covid-data_subset.csv?dl=1", guess_max = 10000)
+covid_small <- select(covid, country:new_cases, population) %>%
+    filter(date == "2021-01-01") %>%
+    mutate(yr = year(ymd(date)))
+pop <- read_csv("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1")
+```
+
+
+## Today's programme
+
+Today we will learn about data wrangling, or how to get your data into R and transform them for visualization and modeling. The workhorse for these tasks is the [dplyr](https://dplyr.tidyverse.org/) package, part of the [tidyverse](https://www.tidyverse.org/) suite. 
+
+![*Data wrangling*](https://www.dropbox.com/s/j8ihgwbbbgnjjuo/data-science-wrangle.png?dl=1)
+
+In the interactive tutorial part, we will cover
+
+* Selecting variables with `select()`
+* Arranging observations with `arrange()`
+* Filtering observations with `filter()`
+* Creating new variables with `mutate()`
+* Summarise data with `summarise()`
+* Chaining transformations with the pipe `%>%`
+* Importing data into R 
+* Tidying data 
+* Joining tables
+
+We will use a subset of the daily COVID epidemiological data from [ourworldindata.org](https://ourworldindata.org/coronavirus-source-data)
+
+**Some useful resources**
+
+[dplyr cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)  
+R for Data Science, chapters [Data transformation](https://r4ds.had.co.nz/transform.html) and [Wrangle](https://r4ds.had.co.nz/wrangle-intro.html)
+
+## Selecting variables
+
+### Let's have a look at the dataset
+```{r select1, exercise = TRUE}
+covid
+```
+
+### Selecting individual columns
+```{r select2, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r select2-solution}
+## by column name
+select(covid, country)
+select(covid, total_tests)
+select(covid, country, total_tests)
+select(covid, total_tests, country)
+
+## by column position
+select(covid, 1, 5)
+
+## by column position and name
+select(covid, 1, country)
+```
+
+### Selecting column ranges
+```{r select3, exercise = TRUE}
+covid %>%
+  col_names()
+```
+```{r select3-solution}
+## by column names
+select(covid, new_cases:total_cases_per_million)
+
+## by column position
+select(covid, 6:11) ## by positions
+```
+
+### Excluding columns
+```{r select4, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r select4-solution}
+## by column names
+select(covid, -iso_code)
+select(covid, -date:-human_development_index)
+
+## by column position
+select(covid, -4:-59) ## by positions
+```
+
+### Helper functions
+```{r select5, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r select5-solution}
+### select columns based on pattern matching
+select(covid, starts_with("new"))
+select(covid, ends_with("rate"))
+select(covid, contains("case"))
+
+### all columns helper
+select(covid, everything())
+select(covid, country, everything())
+```
+
+## Arrange observations
+```{r arr1, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r arr1-solution}
+arrange(covid, new_cases)
+arrange(covid, desc(new_cases))
+arrange(covid, desc(date), desc(new_cases))
+```
+
+## Short exercises 1
+```{r sel-ex1, exercise = TRUE}
+covid
+```
+```{r sel-ex1-solution}
+select(covid, contains("total"))
+```
+
+``````{r sel-q1, echo=FALSE}
+question("Select all columns that contain the string \"total\". What is the name of the variable in the fifth column?",
+         answer("total_deaths"),
+         answer("total_tests", correct = TRUE),
+         answer("total_vaccinations")
+)
+```
+```{r sel-ex2, exercise = TRUE}
+covid
+```
+```{r sel-ex2-solution}
+arrange(covid, desc(total_cases))
+```
+
+``````{r sel-q2, echo=FALSE}
+question("Which country has the most total cases?",
+         answer("United States", correct = TRUE),
+         answer("United Kingdom"),
+         answer("Belgium")
+)
+```
+
+## Filter observations
+
+### Basic filters
+```{r filter1, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r filter1-solution}
+filter(covid, country == "Denmark")
+filter(covid, continent != "Europe")
+filter(covid, total_cases < 100)
+filter(covid, new_cases > 1000)
+filter(covid, date %in% c(ymd(20200301), ymd(20200302)))
+```
+
+
+### Multiple filters
+```{r filter2, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r filter2-solution}
+filter(covid, country == "Denmark", date == "2020-03-01")
+filter(covid, country == "Denmark", date == "2018-03-01")
+filter(covid, country == "Denmark" | date == "2018-03-01")
+filter(covid, !(country == "Denmark" | date == "2018-03-01"))
+filter(covid, is.na(new_cases_smoothed))
+filter(covid, !is.na(new_cases_smoothed))
+```
+
+### Other useful filters
+```{r filter3, exercise = TRUE}
+covid %>%
+    colnames()
+```
+```{r filter3-solution}
+### select rows by index
+slice(covid, 10)
+slice(covid, 1:10)
+
+### select rows with distinct entries 
+distinct(covid, country)
+distinct(covid, country, continent)
+distinct(covid, continent)
+
+### select rows with top N values of variable
+top_n(covid, 10, new_cases)
+top_n(covid, 10, date)
+top_n(covid, 10, country)
+```
+
+## Create variables
+
+### We first create a subset of the data
+```{r mutate1, exercise = TRUE}
+covid_small <- select(covid, country:new_cases, population) %>%
+    filter(date == "2021-01-01")
+covid_small()
+```
+
+### Create a single new variable
+```{r mutate2, exercise = TRUE}
+covid_small
+```
+```{r mutate2-solution}
+mutate(covid_small, total_cases_thousands = total_cases / 1000)
+mutate(covid_small, previous_cases = total_cases - new_cases)
+mutate(covid_small, new_cases_per_100k = new_cases / population * 100000)
+```
+
+### Reuse created variable
+```{r mutate3, exercise = TRUE}
+covid_small
+```
+```{r mutate3-solution}
+mutate(covid_small, total_cases_fraction = total_cases / population)
+mutate(covid_small, total_cases_fraction = total_cases / population, total_cases_percent = total_cases_fraction * 100)
+```
+
+### Keep only the newly created variables
+```{r mutate4, exercise = TRUE}
+covid_small
+```
+```{r mutate4-solution}
+transmute(covid_small, total_cases_fraction = total_cases / population, total_cases_percent = total_cases_fraction * 100)
+```
+
+## Short exercise 2
+```{r filter-ex1, exercise = TRUE}
+covid
+```
+```{r filter-ex1-solution}
+ filter(covid, country == "Sweden", new_cases > 1000)
+```
+
+```{r filter-q1, echo=FALSE}
+question("Select all observations from Sweden and with greater than 1000 new cases (`new_cases`). Which was the first day where over 1000 cases were recorded?",
+         answer("2020-07-03"),
+         answer("2020-06-03", correct = TRUE),
+         answer("2020-07-05")
+)
+```
+
+
+## Summarise observations
+
+### Basic summarise
+```{r summ1, exercise = TRUE}
+covid
+```
+```{r summ1-solution}
+summarise(covid, max_new_cases = max(new_cases))
+summarise(covid, max_new_cases = max(new_cases, na.rm = TRUE))
+```
+
+
+### Grouped summarise
+```{r summ2, exercise = TRUE}
+covid_by_country <- group_by(covid, country)
+covid_by_country
+```
+```{r summ2-solution}
+## summarise across all observations
+summarise(covid, max_new_cases = max(new_cases, na.rm = TRUE))
+
+## summarise across all observations within grouping variable
+summarise(covid_by_country, max_new_cases = max(new_cases, na.rm = TRUE))
+summarise(covid_by_country, missing_new_cases = sum(is.na(new_cases)))
+```
+
+### Counting
+```{r summ3, exercise = TRUE}
+covid
+```
+```{r summ3-solution}
+count(covid, country)
+count(covid, date)
+count(covid, date, sort = TRUE)
+count(covid, country, date)
+```
+
+
+## The pipe
+
+### Basic chaining of commands with the pipe operator `%>%`
+```{r pipe1, exercise = TRUE}
+covid_by_country <- group_by(covid, country)
+summarise(covid_by_country, max_new_cases = max(new_cases, na.rm = TRUE))
+```
+```{r pipe1-solution}
+group_by(covid, country) %>%
+  summarise(max_new_cases = max(new_cases, na.rm = TRUE))
+
+group_by(covid, country) %>%
+  summarise(max_new_cases = max(new_cases, na.rm = TRUE)) %>%
+  arrange(desc(max_new_cases))
+```
+
+### A complex wrangling example
+
+```{r pipe2, exercise = TRUE}
+covid
+```
+```{r pipe2-solution}
+select(covid, country, date, new_cases, population) %>%
+    filter(date > ymd(20201224), date < ymd(20210101)) %>%
+    group_by(country, population) %>%
+    summarise(avg_new_cases = mean(new_cases)) %>%
+    mutate(avg_new_cases_per_100k = avg_new_cases / population * 100000) %>%
+    ungroup() %>%
+    arrange(desc(avg_new_cases_per_100k))
+```
+
+### Piping into ggplot
+```{r pipe3, exercise = TRUE}
+covid
+```
+```{r pipe3-solution}
+select(covid, country, date, new_cases) %>%
+    filter(country %in% c("Denmark", "Sweden")) %>%
+    ggplot(aes(x = date, y = new_cases, colour = country)) + 
+      geom_point()
+```
+
+## Short exercise 3
+```{r pipe-ex1, exercise = TRUE}
+covid
+```
+```{r pipe-ex1-solution}
+group_by(covid, country) %>% summarise(new_cases = median(new_cases, na.rm = TRUE))
+```
+
+```{r pipe-q1, echo=FALSE}
+question("Calculate the median of the number of new cases (`new_cases`) for each country. What was the median number of new cases in Denmark?",
+         answer("502"),
+         answer("125"),
+         answer("244", correct = TRUE)
+)
+```
+```{r pipe-q2, echo=FALSE}
+question("Which row number contains the result for New Zealand?",
+         answer("1"),
+         answer("4", correct = TRUE),
+         answer("5")
+)
+```
+
+## Data I/O
+
+### Reading files
+```{r io1, exercise = TRUE}
+pop <- read.csv("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1")
+str(pop)
+pop <- read_csv("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1")
+str(pop)
+```
+
+### Import options
+```{r io2, exercise = TRUE}
+pop <- read_delim("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1", delim = ",")
+```
+```{r io2-solution}
+pop <- read_delim("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1", delim = ",", col_names = c("a", "b", "c", "d", "e", "f", "g"))
+pop <- read_delim("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1", delim = ",", col_names = c("a", "b", "c", "d", "e", "f", "g"), skip= 1)
+pop <- read_delim("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1", delim = ",", col_types = "cdddddd")
+pop <- read_delim("https://www.dropbox.com/s/ntdh4coibs7er2g/un_pop.csv?dl=1", delim = ",", col_types = "fiiiiii")
+```
+
+### Writing files
+```{r io3, exercise = TRUE}
+write_tsv(pop, path = "~/pop.tsv")
+```
+```{r io3-solution}
+write_tsv(pop, path = "~/pop_nocolnames.tsv", col_names = FALSE)
+write_tsv(pop, path = "~/pop.tsv.gz")
+```
+
+
+## Tidy data
+
+![*Rules of tidy data*](https://www.dropbox.com/s/nwcby2tkxk7iosm/tidy-1.png?dl=1){width=80%}
+
+### Pivot table longer
+```{r tidy1, exercise = TRUE}
+pop
+```
+```{r tidy1-solution}
+pop %>%
+    pivot_longer(pop_65_plus:pop_12_24)
+pop %>%
+    pivot_longer(pop_65_plus:pop_12_24, names_to = "age_group", values_to = "population")
+```
+
+### Pivot table wider
+```{r tidy2, exercise = TRUE}
+pop
+```
+```{r tidy2-solution}
+pop %>%
+    select(country, year, pop_65_plus) %>%
+    pivot_wider(names_from = "year", values_from = "pop_65_plus")
+```
+
+### Separate values into different columns
+```{r tidy3, exercise = TRUE}
+pop
+```
+```{r tidy3-solution}
+pop %>%
+    select(country, year, pop_6_11, pop_12_24, pop_25_64) %>%
+    pivot_longer(-country:-year) %>%
+    mutate(name = gsub("pop_", "", name)) %>%
+    separate(name, into = c("age_low", "age_high"))
+```
+
+
+## Joining tables
+
+```{r join1}
+covid_small <- select(covid, country:new_cases, population) %>%
+    filter(date == "2021-01-01") %>%
+    mutate(yr = year(ymd(date)))
+```
+
+### Mutating join, inner join
+```{r join2, exercise = TRUE}
+covid_small
+pop
+```
+```{r join2-solution}
+## Inner join, keep only matching keys
+covid_small %>%
+    inner_join(pop)
+covid_small %>%
+    inner_join(pop, by = c("country" = "country"))
+covid_small %>%
+    inner_join(pop, by = c("country" = "country", "yr" = "year"))
+
+```
+
+### Mutating join, outer joins
+```{r join3, exercise = TRUE}
+covid_small
+pop
+```
+```{r join3-solution}
+## Outer joins, keep non-matching keys
+covid_small %>%
+    left_join(pop, by = c("country" = "country", "yr" = "year"))
+covid_small %>%
+    right_join(pop, by = c("country" = "country", "yr" = "year"))
+covid_small %>%
+    full_join(pop, by = c("country" = "country", "yr" = "year"))
+```
+
+### Filtering joins
+```{r join4, exercise = TRUE}
+covid_small
+pop
+```
+```{r join4-solution}
+## Semi join, keep rows with matching keys
+covid_small %>%
+    semi_join(pop, by = c("country" = "country"))
+
+df <- tibble(country = "Denmark", date = ymd(20210101))
+covid_small %>%
+    semi_join(df)
+
+## Anti join, keep rows not matching keys
+covid_small %>%
+    anti_join(df)
+```
+
+
+## Larger exercises
+
+### Exercise 1
+Using the full `covid` dataset as starting point, calculate the test positivity rate, averaged per month for each year and country, and save the output to a new variable. This can be achieved with the following steps:
+
+* Separating the values in the `date` column into year, month and day components using `separate()`
+* Grouping the resulting table by country, month and year
+* Calculating the average of the test positivity rate (`new_cases` divided by `new_tests`) within groups
+
+```{r ex1, exercise = TRUE}
+covid
+```
+```{r ex1-hint-1}
+d <- covid %>%
+    select(date, country, new_cases, new_tests) %>%
+    separate(date, into = c("year", "month", "day"))
+```
+```{r ex1-hint-2}
+d <- covid %>%
+    select(date, country, new_cases, new_tests) %>%
+    separate(date, into = c("year", "month", "day")) %>%
+    group_by(country, month, year) %>%
+    summarise(cases_per_test = mean(new_cases/new_tests, na.rm = TRUE)) %>%
+    mutate(pos_rate = cases_per_test * 100) %>%
+    ungroup()
+```
+Examining the resulting table, answer the following questions:
+
+```{r ex1-q1, echo=FALSE}
+question("Which month had the lowest positivity rate in Denmark?",
+         answer("March 2020"),
+         answer("June 2020"),
+         answer("July 2020", correct = TRUE)
+) 
+```
+```{r ex1-q2, echo=FALSE}
+question("In which countries occurred the five months with the overall highes positivity rates?",
+         answer("Nigeria, United Kingdom, Sweden"),
+         answer("Nigeria, United Kingdom, United States", correct = TRUE),
+         answer("United States"),
+         answer("United States, Sweden")
+) 
+```
+
+### Exercise 2
+Using the full `covid` dataset as starting point, calculate and plot a 7 day rolling average of new cases for Denmark and Sweden. This can be achieved with the following steps:
+
+* make a subset of the data containing only observations from Denmark and Sweden
+* select the variables containing the data for date, number of new cases and country
+* create a new variable, calculating the average number of cases for a seven day window centered on each date
+* use ggplot to visualise the resulting table, mapping the colour aesthetic to the `country` variable
+
+For calculating the 7-day average, we will use the `slide_dbl` function from the `sliders` package. You can find an example of how to use it on the package [GitHub page](https://github.com/DavisVaughan/slider) in the "Examples" section.
+
+```{r ex2, exercise = TRUE}
+covid
+```
+```{r ex2-hint-1}
+d <- filter(covid, country %in% c("Denmark", "Sweden")) %>%
+    select(date, country, new_cases) %>%
+    group_by(country)
+```
+```{r ex2-hint-2}
+d <- filter(covid, country %in% c("Denmark", "Sweden")) %>%
+    select(date, country, new_cases) %>%
+    group_by(country) %>%
+    mutate(new_cases_avg = slide_dbl(new_cases, ~mean(.x), .before = 3, .after = 3))
+```
+```{r ex2-solution}
+d <- filter(covid, country %in% c("Denmark", "Sweden")) %>%
+    select(date, country, new_cases) %>%
+    group_by(country) %>%
+    mutate(new_cases_avg = slide_dbl(new_cases, ~mean(.x), .before = 3, .after = 3))
+
+ggplot(d, aes(x = date, y = new_cases_avg, color = country)) +
+    geom_point(size = 1) +
+    geom_line()
+```
