@@ -1,0 +1,463 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Genes and Geography in Europe},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Genes and Geography in Europe}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\hypertarget{preparing-the-dataset}{%
+\subsection{Preparing the dataset}\label{preparing-the-dataset}}
+
+First we'll set up the environment. We need the \texttt{tidyverse}
+packages, as well as the \texttt{vegan} package to perfrorm the
+procrustes analysis
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages ------------------------------------------------------------------------------------- tidyverse 1.3.0 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.3.0     v purrr   0.3.3
+## v tibble  2.1.3     v dplyr   0.8.5
+## v tidyr   1.0.2     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ---------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(vegan)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: permute
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## This is vegan 2.5-7
+\end{verbatim}
+
+Let's read in the data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca }\OtherTok{\textless{}{-}} \FunctionTok{read\_tsv}\NormalTok{(}\StringTok{"datasets/novembre\_2008\_pca.tsv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   sampleId = col_character(),
+##   country = col_character(),
+##   alabels = col_character(),
+##   longitude = col_double(),
+##   latitude = col_double(),
+##   PC1 = col_double(),
+##   PC2 = col_double()
+## )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{colors }\OtherTok{\textless{}{-}} \FunctionTok{read\_tsv}\NormalTok{(}\StringTok{"datasets/novembre\_2008\_colours.tsv"}\NormalTok{, }\AttributeTok{col\_names =} \FunctionTok{c}\NormalTok{(}\StringTok{"country"}\NormalTok{, }\StringTok{"color"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   country = col_character(),
+##   color = col_character()
+## )
+\end{verbatim}
+
+The variable \texttt{pca} contains the results of the principal
+component analysis of 1,387 European individuals from Novembre et al
+2008. Let's have a look at the first few lines of the dataset:
+
+\begin{longtable}[]{@{}lllrrrr@{}}
+\toprule
+sampleId & country & alabels & longitude & latitude & PC1 & PC2 \\
+\midrule
+\endhead
+ind\_474 & Croatia & HR & 16.10000 & 45.32000 & 0.0111 & -0.0460 \\
+ind\_660 & Serbia and Montenegro & YG & 20.61572 & 43.94949 & -0.0300 &
+-0.0443 \\
+ind\_1890 & Czech Republic & CZ & 15.37698 & 49.73661 & 0.0137 &
+-0.0444 \\
+ind\_1923 & Bosnia and Herzegovina & BA & 17.86202 & 44.17588 & 0.0028 &
+-0.0493 \\
+ind\_2083 & Serbia and Montenegro & YG & 20.61572 & 43.94949 & -0.0031 &
+-0.0416 \\
+ind\_2733 & Serbia and Montenegro & YG & 20.61572 & 43.94949 & -0.0026 &
+-0.0424 \\
+\bottomrule
+\end{longtable}
+
+The color palette used for the countries is stored as a table in the
+variable \texttt{colors}:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+country & color \\
+\midrule
+\endhead
+Germany & gold1 \\
+Netherlands & orange \\
+Austria & tan3 \\
+Luxembourg & yellow \\
+Czech Republic & yellowgreen \\
+Hungary & gold2 \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{rotating-the-pca}{%
+\subsection{Rotating the PCA}\label{rotating-the-pca}}
+
+In order to find the rotation for the PCA that aligns best with the
+geographic location of the samples, we will use the
+\texttt{procrustes()} function from the package \texttt{procrustes}. We
+first need to convert both the principal components and geographic
+locations of the samples into matrix format.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loc }\OtherTok{\textless{}{-}}\NormalTok{ pca }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(longitude, latitude) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{as.matrix}\NormalTok{()}
+
+\NormalTok{pca1 }\OtherTok{\textless{}{-}}\NormalTok{ pca }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(PC1, PC2) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{as.matrix}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Now we carry out the procrustes analysis to find the optimal rotation
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rot }\OtherTok{\textless{}{-}} \FunctionTok{procrustes}\NormalTok{(loc, pca1)}
+\end{Highlighting}
+\end{Shaded}
+
+We can examine the result by using base R \texttt{plot} function on the
+resulting object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(rot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{10_analyze_novembre2008_files/figure-latex/procrustes3-1.pdf}
+
+The rotated PC coordinates can be extracted from the \texttt{Yrot}
+element of the result object. Here we add two new columns for the
+rotated PCs to our \texttt{pca} object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca }\OtherTok{\textless{}{-}}\NormalTok{ pca }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{PC1\_rot =}\NormalTok{ rot}\SpecialCharTok{$}\NormalTok{Yrot[,}\DecValTok{1}\NormalTok{], }\AttributeTok{PC2\_rot =}\NormalTok{ rot}\SpecialCharTok{$}\NormalTok{Yrot[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{recreating-figure-1-of-novembre-et-al-2008}{%
+\subsection{Recreating Figure 1 of Novembre et al
+2008}\label{recreating-figure-1-of-novembre-et-al-2008}}
+
+With the rotated PCA results calculated, everything is in place for
+creating the figure. First we set up the color scale for the countries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{colorscale }\OtherTok{\textless{}{-}}\NormalTok{ colors}\SpecialCharTok{$}\NormalTok{color}
+\FunctionTok{names}\NormalTok{(colorscale) }\OtherTok{\textless{}{-}}\NormalTok{ colors}\SpecialCharTok{$}\NormalTok{country}
+\end{Highlighting}
+\end{Shaded}
+
+Next, we calculate the median PC values for each country
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pca\_summary }\OtherTok{\textless{}{-}}\NormalTok{ pca }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{group\_by}\NormalTok{(country, alabels) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{summarise\_at}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"PC1\_rot"}\NormalTok{, }\StringTok{"PC2\_rot"}\NormalTok{), median)}
+\end{Highlighting}
+\end{Shaded}
+
+To add rotated axes lines, we take the coordinates of the four points at
+the end of the axis ranges, and rotate them into the new coordinate
+space using the \texttt{predict} function on the procrustes output
+object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lim\_pc1 }\OtherTok{\textless{}{-}} \FunctionTok{extendrange}\NormalTok{(pca}\SpecialCharTok{$}\NormalTok{PC1)}
+\NormalTok{lim\_pc2 }\OtherTok{\textless{}{-}} \FunctionTok{extendrange}\NormalTok{(pca}\SpecialCharTok{$}\NormalTok{PC2)}
+
+\NormalTok{axis }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}\FunctionTok{c}\NormalTok{(lim\_pc1[}\DecValTok{1}\NormalTok{], }\DecValTok{0}\NormalTok{), }\FunctionTok{c}\NormalTok{(lim\_pc1[}\DecValTok{2}\NormalTok{], }\DecValTok{0}\NormalTok{), }\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, lim\_pc2[}\DecValTok{1}\NormalTok{]), }\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, lim\_pc2[}\DecValTok{2}\NormalTok{]))}
+\NormalTok{axis\_rot }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rot, axis, }\AttributeTok{truemean =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{axis\_rot\_df  }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}\AttributeTok{x =}\NormalTok{ axis\_rot[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{),}\DecValTok{1}\NormalTok{], }\AttributeTok{xend =}\NormalTok{ axis\_rot[}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{),}\DecValTok{1}\NormalTok{], }\AttributeTok{y =}\NormalTok{ axis\_rot[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{),}\DecValTok{2}\NormalTok{], }\AttributeTok{yend =}\NormalTok{ axis\_rot[}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{), }\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+Similarly, we calculate rotated coordinates for two axis labels, in a
+position shifted towards the origin from the axis end point
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{labels }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}\FunctionTok{c}\NormalTok{(lim\_pc1[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*} \FloatTok{0.85}\NormalTok{, }\DecValTok{0}\NormalTok{), }\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, lim\_pc2[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*} \FloatTok{0.85}\NormalTok{))}
+\NormalTok{labels\_rot }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rot, labels, }\AttributeTok{truemean =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{as\_tibble}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"PC1"}\NormalTok{, }\StringTok{"PC2"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: `as_tibble.matrix()` requires a matrix with column names or a `.name_repair` argument. Using compatibility `.name_repair`.
+## This warning is displayed once per session.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colnames}\NormalTok{(labels\_rot)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"PC1\_rot"}\NormalTok{, }\StringTok{"PC2\_rot"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Finally, we need to calculate the rotation angle from the rotation
+matrix for the axis label text
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{theta1 }\OtherTok{\textless{}{-}} \FunctionTok{acos}\NormalTok{(rot}\SpecialCharTok{$}\NormalTok{rotation[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]) }\SpecialCharTok{*} \DecValTok{180} \SpecialCharTok{/}\NormalTok{ pi}
+\end{Highlighting}
+\end{Shaded}
+
+With all objects in place we can now build the final plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(pca, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ PC1\_rot, }\AttributeTok{y =}\NormalTok{ PC2\_rot))}
+\NormalTok{p }\SpecialCharTok{+}
+    \FunctionTok{geom\_segment}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{xend =}\NormalTok{ xend, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{yend =}\NormalTok{ yend), }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{, }\AttributeTok{arrow =} \FunctionTok{arrow}\NormalTok{(}\AttributeTok{ends =} \StringTok{"both"}\NormalTok{, }\AttributeTok{angle =} \DecValTok{10}\NormalTok{, }\AttributeTok{type =} \StringTok{"closed"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.02}\NormalTok{, }\StringTok{"npc"}\NormalTok{)), }\AttributeTok{data =}\NormalTok{ axis\_rot\_df) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{, }\AttributeTok{colour =} \StringTok{"white"}\NormalTok{, }\AttributeTok{data =}\NormalTok{ labels\_rot) }\SpecialCharTok{+}
+    \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ labels), }\AttributeTok{angle =} \FunctionTok{c}\NormalTok{(theta1 }\SpecialCharTok{+} \DecValTok{180}\NormalTok{, theta1 }\SpecialCharTok{+} \DecValTok{270}\NormalTok{), }\AttributeTok{data =}\NormalTok{ labels\_rot) }\SpecialCharTok{+}
+    \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ alabels, }\AttributeTok{colour =}\NormalTok{ country), }\AttributeTok{alpha =} \FloatTok{0.8}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{colour =}\NormalTok{ country), }\AttributeTok{size =} \DecValTok{7}\NormalTok{, }\AttributeTok{data =}\NormalTok{ pca\_summary) }\SpecialCharTok{+}
+    \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ alabels), }\AttributeTok{size =} \DecValTok{3}\NormalTok{, }\AttributeTok{data =}\NormalTok{ pca\_summary) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Country"}\NormalTok{, }\AttributeTok{values =}\NormalTok{ colorscale) }\SpecialCharTok{+}
+    \FunctionTok{coord\_equal}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{10_analyze_novembre2008_files/figure-latex/viz6-1.pdf}
+
+\hypertarget{predicting-location-of-origin-from-the-pca-position}{%
+\subsection{Predicting location of origin from the PCA
+position}\label{predicting-location-of-origin-from-the-pca-position}}
+
+In this last section, we will follow the paper and build a predictor for
+an individual's geographic location from its PCA position, using linear
+regression. As test case, we take all individuals of a country of
+choice, remove them from the dataset and use the remaining individuals
+to build the model. Then, we use the built model to predict the location
+of the test individuals.
+
+First we split our dataset into training and test data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test\_country }\OtherTok{\textless{}{-}} \StringTok{"Germany"}
+\NormalTok{d\_train }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(pca, country }\SpecialCharTok{!=}\NormalTok{ test\_country)}
+\NormalTok{d\_test }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(pca, country }\SpecialCharTok{==}\NormalTok{ test\_country)}
+\end{Highlighting}
+\end{Shaded}
+
+Next, we carry out two linear regressions, modelling both longitude and
+latitude as functions of the rotated PCs and including their interaction
+term
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm\_long }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(longitude }\SpecialCharTok{\textasciitilde{}}\NormalTok{ PC1\_rot }\SpecialCharTok{*}\NormalTok{ PC2\_rot, }\AttributeTok{data =}\NormalTok{ d\_train)}
+\NormalTok{lm\_lat }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(latitude }\SpecialCharTok{\textasciitilde{}}\NormalTok{ PC1\_rot }\SpecialCharTok{*}\NormalTok{ PC2\_rot, }\AttributeTok{data =}\NormalTok{ d\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we use the \texttt{predict()} function to infer the predicted
+geographic location for the test samples, and reshape the results into a
+format useful for plotting
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d1 }\OtherTok{\textless{}{-}} \FunctionTok{select}\NormalTok{(d\_test, sampleId, longitude, latitude) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{longitude\_pr =} \FunctionTok{predict}\NormalTok{(lm\_long, d\_test), }\AttributeTok{latitude\_pr =} \FunctionTok{predict}\NormalTok{(lm\_lat, d\_test), }\AttributeTok{longitude\_orig =}\NormalTok{ longitude, }\AttributeTok{latitude\_orig =}\NormalTok{ latitude) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{longitude}\SpecialCharTok{:{-}}\NormalTok{latitude) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{sampleId) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{separate}\NormalTok{(name, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"variable"}\NormalTok{, }\StringTok{"group"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ variable, }\AttributeTok{values\_from =}\NormalTok{ value)}
+\end{Highlighting}
+\end{Shaded}
+
+Finally, we can plot the inferred versus actual sample locations using
+the basic map plotting functionality in \texttt{ggplot2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{w }\OtherTok{\textless{}{-}} \FunctionTok{map\_data}\NormalTok{(}\StringTok{"world"}\NormalTok{)}
+
+\NormalTok{lim\_long }\OtherTok{\textless{}{-}} \FunctionTok{extendrange}\NormalTok{(pca}\SpecialCharTok{$}\NormalTok{longitude)}
+\NormalTok{lim\_lat }\OtherTok{\textless{}{-}} \FunctionTok{extendrange}\NormalTok{(pca}\SpecialCharTok{$}\NormalTok{latitude)}
+
+\NormalTok{pal }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(pal) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"orig"}\NormalTok{, }\StringTok{"pr"}\NormalTok{)}
+\NormalTok{sh }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{16}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(sh) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"orig"}\NormalTok{, }\StringTok{"pr"}\NormalTok{)}
+
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(w)}
+\NormalTok{p }\SpecialCharTok{+}
+    \FunctionTok{geom\_polygon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(long, lat, }\AttributeTok{group =}\NormalTok{ group), }\AttributeTok{fill =} \StringTok{"white"}\NormalTok{, }\AttributeTok{color =} \StringTok{"grey"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ longitude, }\AttributeTok{y =}\NormalTok{ latitude, }\AttributeTok{colour =}\NormalTok{ group, }\AttributeTok{shape =}\NormalTok{ group), }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{data =}\NormalTok{ d1) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ pal) }\SpecialCharTok{+}
+    \FunctionTok{scale\_shape\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ sh) }\SpecialCharTok{+}
+    \FunctionTok{coord\_quickmap}\NormalTok{(}\AttributeTok{xlim =}\NormalTok{ lim\_long, }\AttributeTok{ylim =}\NormalTok{ lim\_lat)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{10_analyze_novembre2008_files/figure-latex/pred4-1.pdf}
+
+\end{document}
