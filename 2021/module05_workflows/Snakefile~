@@ -1,0 +1,18 @@
+
+
+
+## --------------------------------------------------------------------------------
+## rules
+
+rule get_vcf:
+    input:
+        vcf="/willerslev/scratch/dsw670/pathogens/data_public/plasmodium/pf_6.0/Pf_60_public_{chrom}.final.vcf.gz",
+        inds="full.inds.txt"
+    output:
+        vcf="vcf/{chrom}." + PREFIX + ".var.filter.vcf.gz",
+        tbi="vcf/{chrom}." + PREFIX + ".var.filter.vcf.gz.tbi"
+    shell:
+        """
+        bcftools view {input.vcf} -c1:nonmajor -f PASS -m2 -M2 -v snps -S {input.inds} -Oz > {output.vcf}
+        bcftools index -t {output.vcf}
+        """
